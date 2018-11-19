@@ -23,7 +23,7 @@ with open('mem.txt') as input:
 	for line in input:
 		if line.startswith('MEM'):
 			break
-	total = 0
+	total, count = 0, 0
 	oneK = 1024
 	oneM = oneK * 1024
 	oneG = oneM * 1024
@@ -31,14 +31,19 @@ with open('mem.txt') as input:
 		mem, command = line.strip().split(' ', 1)
 		mem = mem.strip('\n\t +-')
 		if mem.endswith('G'):
-			mem += int(mem[:-1]) * oneG
+			m = int(mem[:-1]) * oneG
 		elif mem.endswith('M'):
-			total += int(mem[:-1]) * oneM
+			m = int(mem[:-1]) * oneM
 		elif mem.endswith('K'):
-			total += int(mem[:-1]) * oneK
+			m = int(mem[:-1]) * oneK
+		elif mem.endswith('B'):
+			m = int(mem[:-1])
 		else:
-			total += int(mem)
+			m = int(mem)
+		total += m
 		command = command.strip() + ' ' * 20
-		print('{}\t{}\t{}G'.format(command[:20], mem, round(total/oneG,2)))
+		count += 1
+		print('{}\t{}\t{}\t{}G'.format(command[:20], m, mem, round(total/oneG,2)))
+	print('There are', count, 'programs running.')
 	print('Total memory usage: {}G'.format(round(total/oneG,2)))
 
